@@ -8,8 +8,7 @@ card2_año = card2_año.map(function(each_element){
 $('#container-card2').highcharts({
     chart: {
         type: 'column',
-        height:340,
-        width:480,
+        height:340
     },
     title: {
         text: 'MOTIVO DE RETIRO vs. PROMEDIO DE AÑOS EN LA EMPRESA',

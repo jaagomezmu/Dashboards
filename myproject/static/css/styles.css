@@ -134,16 +134,13 @@ a {
 
 .card:nth-child(2) {
     grid-area: c2;
-    width: 510px;
 }
 
 .card:nth-child(3) {
     grid-area: c3;
-    width: 510px;
 }
 .card:nth-child(4) {
     grid-area: c4;
-    width: 510px;
 }
 
 @media (max-width: 925px) {

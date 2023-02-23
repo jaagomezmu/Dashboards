@@ -27,7 +27,7 @@ Highcharts.chart('container-card1', {
       color: 'red'
     }],
     title: {
-        text: 'MOTIVO DE RETIRO vs. SALARIO TOTAL PROMEDIO',
+        text: 'MOTIVO DE RETIRO vs.SALARIO TOTAL PROMEDIO',
         align: 'center'
     },
 });

@@ -35,6 +35,5 @@ Highcharts.chart('container-area', {
     },
     chart: {
         height:150,
-        width:505,
 }
 });

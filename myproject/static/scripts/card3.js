@@ -2,7 +2,6 @@ Highcharts.chart('container-pie', {
     chart: {
 
         height:150,
-        width:505,
 
         type: 'pie'
     },
