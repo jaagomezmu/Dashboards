@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3 sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">
+                            <span data-feather="home" class="align-text-bottom"></span>
+                            EDA
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div
+                class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Análisis exploratorio de datos</h1>
+            </div>
+
+            <h5>País</h5>
+            <figure class="highcharts-figure">
+                <div id="container-pais" style="height: 300px; margin:auto"></div>
+                <p class="highcharts-description">
+                    <li>Número de campos: {{pais_descripcion[0]}}</li>
+                    <li>Número de campos nulos: {{pais_descripcion[4]}} </li>
+                    <li>Valores únicos: {{pais_descripcion[1]}}</li>
+                    <li>Valor más frecuente: {{pais_descripcion[2]}} con {{pais_descripcion[3]}} apariciones</li>
+                </p>
+            </figure>
+            <br>
+            <h5>Sexo</h5>
+            <figure class="highcharts-figure">
+                <div id="container-sexo" style="height: 300px; margin:auto"></div>
+                <p class="highcharts-description">
+                    <li>Número de campos: {{sexo_descripcion[0]}}</li>
+                    <li>Número de campos nulos: {{sexo_descripcion[4]}} </li>
+                    <li>Valores únicos: {{sexo_descripcion[1]}}</li>
+                    <li>Valor más frecuente: {{sexo_descripcion[2]}} con {{sexo_descripcion[3]}} apariciones</li>
+                </p>
+            </figure>
+            <br>
+            <h5>Edad</h5>
+            <figure class="highcharts-figure">
+                <div id="container-edad" style="height: 300px; margin:auto"></div>
+                <p class="highcharts-description">
+                </p>
+            </figure>
+
+        </main>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var pais_serie = JSON.parse('{{ pais_serie | tojson | safe}}');
+    var arrPaisName = [];
+    arrPaisName.push(pais_serie.name);
+    var arrPaisData = [];
+    arrPaisData.push(pais_serie.data);
+    var paisSerie = [];
+    for (i = 0; i < arrPaisName[0].length; i++) {
+        paisSerie[i] = [arrPaisName[0][i]].concat(arrPaisData[0][i])
+    };
+
+    var sexo_serie = JSON.parse('{{ sexo_serie | tojson | safe}}');
+    var arrSexoName = [];
+    arrSexoName.push(sexo_serie.name);
+    var arrSexoData = [];
+    arrSexoData.push(sexo_serie.data);
+    var sexoSerie = [];
+    for (i = 0; i < arrSexoName[0].length; i++) {
+        sexoSerie[i] = [arrSexoName[0][i]].concat(arrSexoData[0][i])
+    };
+
+    var edad_serie = JSON.parse('{{ edad_serie | tojson | safe}}');
+    // var arrEdadData = [];
+    // arrEdadData.push(edad_serie)
+    console.log(edad_serie);
+
+    Highcharts.chart('container-pais', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'FRECUENCIA DE PAISES EN EL DATASET'
+        },
+        subtitle: {
+            text: 'Fuente: Change Americas'
+        },
+        xAxis: {
+            categories: arrPaisName[0]
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Frecuencia'
+            }
+        },
+        tooltip: {
+            headerFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<td style="padding:0"><b>{point.y:.0f} registros</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        series: [
+            {
+                name: 'País',
+                data: paisSerie
+            }
+        ]
+    });
+
+    Highcharts.chart('container-sexo', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'FRECUENCIA DE SEXO EN EL DATASET'
+        },
+        subtitle: {
+            text: 'Fuente: Change Americas'
+        },
+        xAxis: {
+            categories: arrSexoName[0]
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Frecuencia'
+            }
+        },
+        tooltip: {
+            headerFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<td style="padding:0"><b>{point.y:.0f} registros</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        series: [
+            {
+                name: 'Sexo',
+                data: sexoSerie
+            }
+        ]
+    });
+
+    Highcharts.chart('container-edad', {
+        title: {
+            text: 'Highcharts Histogram'
+        },
+
+        xAxis: [{
+            title: { text: 'Data' },
+            alignTicks: false
+        }, {
+            title: { text: 'Histogram' },
+            alignTicks: false,
+            opposite: true
+        }],
+
+        yAxis: [{
+            title: { text: 'Data' }
+        }, {
+            title: { text: 'Histogram' },
+            opposite: true
+        }],
+
+        plotOptions: {
+            histogram: {
+                accessibility: {
+                    point: {
+                        valueDescriptionFormat: '{index}. {point.x:.3f} to {point.x2:.3f}, {point.y}.'
+                    }
+                }
+            }
+        },
+
+        series: [{
+            name: 'Histogram',
+            type: 'histogram',
+            xAxis: 1,
+            yAxis: 1,
+            baseSeries: 's1',
+            zIndex: -1
+        }, {
+            name: 'Data',
+            type: 'scatter',
+            data: edad_serie,
+            id: 's1',
+            marker: {
+                radius: 1.5
+            }
+        }]
+    });
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+{% from 'bootstrap5/form.html' import render_form %}
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Change Americas</title>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fredoka+One">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+
+    {{ bootstrap.load_css() }}
+
+</head>
+
+<body>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <!-- HighCharts -->
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+    <header class="header">
+        <h1 style="color:white" ;>
+            <center>KPIs</center>
+        </h1>
+    </header>
+
+    <section class="sidebar">
+        <div class="container-sidebar" style="text-align: center;">
+            <br>
+            <img width="110" height="50" src="{{ url_for('static', filename='img/logo.webp') }}" role="img"
+                aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <title>Placeholder</title>
+            <rect width="100%" height="100%" fill="#777"></rect></img>
+
+        </div>
+        <div class="container-sidebar" style="text-align: center;">
+
+            <h2>FILTROS</h2>
+            {{render_form(form, button_style='danger')}}            
+        </div>
+        <div class="container-sidebar" style="text-align: center;">
+            <p>Por: <b>Javier Alejandro Gómez Muñoz</b><br><a
+                    href="https://www.linkedin.com/in/jaagomezmu"><b><u>LinkedIn</u></b></a></p>
+        </div>
+
+    </section>
+
+    <main class="main">
+        <div class="card">
+            <br>
+            <figure class="highcharts-figure">
+                <div id="container-card1" style="max-height:300px"></div>
+            </figure>
+        </div>
+        <div class="card">
+            <br>
+            <figure class="highcharts-figure">
+                <div id="container-card2" style="max-height:570px"></div>
+            </figure>
+        </div>
+        <div class="card">
+            <br>
+            <figure class="highcharts-figure">
+                <div id="container-pie" style="max-height:300px"></div>
+            </figure>
+        </div>
+
+        <div class="card">
+            <br>
+            <figure class="highcharts-figure">
+                <div id="container-area" style="max-height:300px"></div>
+            </figure>
+        </div>
+
+    </main>
+    {{ bootstrap.load_js() }}
+</body>
+
+<script>
+    submitForms = function () {
+        document.getElementById("make_checkbox_select_pais").submit();
+        document.getElementById("make_checkbox_select_sexo").submit();
+        document.getElementById("make_checkbox_select_estado_civil").submit();
+        document.getElementById("make_checkbox_select_tipo_contratacion").submit();
+        document.getElementById("make_checkbox_select_estado_laboral").submit();
+        sendFiltroData()
+    };
+
+    function myFunc(vars) {
+        return vars
+    };
+    function objToArray(objectLiteral) {
+        var piece1 = Object.keys(objectLiteral);
+        var piece2 = Object.values(objectLiteral);
+        var result = [];
+        for (var i = 0; i < piece1.length; i++) {
+            result.push([piece1[i], piece2[i]])
+        }
+        return result;
+    };
+
+    var text = myFunc({{ text| tojson }});
+    var pie = myFunc({{ pie | tojson }});
+    var card1 = myFunc({{ card1 | tojson }});
+    var card2 = myFunc({{ card2 | tojson }});
+
+    var filtros = []
+
+    $(document).ready(function () {
+        $("select.pais").change(function () {
+            var PaisSeleccionado = $(this).children("option:selected").val();
+            filtros.push(PaisSeleccionado);
+        });
+        $("select.sexo").change(function () {
+            var SexoSeleccionado = $(this).children("option:selected").val();
+            filtros.push(SexoSeleccionado);
+        });
+        $("select.estado_civil").change(function () {
+            var EstadoCivilSeleccionado = $(this).children("option:selected").val();
+            filtros.push(EstadoCivilSeleccionado);
+        });
+        $("select.tipo_contratacion").change(function () {
+            var TipoContratacionSeleccionado = $(this).children("option:selected").val();
+            filtros.push(TipoContratacionSeleccionado);
+        });
+        $("select.estado_laboral").change(function () {
+            var EstadoLaboralSeleccionado = $(this).children("option:selected").val();
+            filtros.push(EstadoLaboralSeleccionado);
+        });
+    });
+
+    function sendFiltroData() {
+        fetch(`${window.origin}/`, {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify(your_data),
+            cache: "no-cache",
+            headers: new Headers({
+                "content-type": "application/json"
+            })
+        })
+    };
+
+</script>
+
+<!-- HighCharts -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script src="{{url_for('static', filename='scripts/card1.js')}}"></script>
+<script src="{{url_for('static', filename='scripts/card2.js')}}"></script>
+<script src="{{url_for('static', filename='scripts/card3.js')}}"></script>
+<script src="{{url_for('static', filename='scripts/card4.js')}}"></script>
+
+</html>
